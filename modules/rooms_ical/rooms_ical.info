@@ -1,0 +1,11 @@
+name = Rooms iCal
+description = Give the possibility to export calendar's states in .ics format
+core = 7.x
+version = 1.x-dev
+
+package = Rooms
+
+files[] = plugins/iCalcreator/iCalcreator.class.php
+
+dependencies[] = rooms_availability
+dependencies[] = date;
