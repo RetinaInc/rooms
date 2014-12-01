@@ -410,7 +410,7 @@ function rooms_booking_edit_form($form, &$form_state, $booking) {
     $type_obj = rooms_unit_type_load($unit->type);
 
     foreach (rooms_unit_get_unit_options($unit) as $option) {
-      $option_name = strtolower(str_replace(array(':', ' '), '_', $option['name']));
+      $option_name = rooms_options_machine_name($option['name']);
       if (isset($booking->data[$option_name])) {
         if (!isset($form_state['values'][$option_name])) {
           $form_state['values'][$option_name] = isset($booking->data[$option_name]);
@@ -638,7 +638,7 @@ function rooms_booking_edit_form($form, &$form_state, $booking) {
                 if (!isset($form['availability_fieldset']['unit_fieldset']['options_fieldset']['#title'])) {
                   $form['availability_fieldset']['unit_fieldset']['options_fieldset']['#title'] = t('Available options for @unit_name', array('@unit_name' => $unit->name));
                 }
-                $option_name = strtolower(str_replace(array(':', ' '), '_', $option['name']));
+                $option_name = rooms_options_machine_name($option['name']);
 
                 $form['availability_fieldset']['unit_fieldset']['options_fieldset'][$option_name] = array(
                   '#type' => 'checkbox',
@@ -668,7 +668,7 @@ function rooms_booking_edit_form($form, &$form_state, $booking) {
               // Create Price Modifiers.
               $price_modifiers = array();
               foreach (rooms_unit_get_unit_options($unit) as $option) {
-                $option_name = strtolower(str_replace(array(':', ' '), '_', $option['name']));
+                $option_name = rooms_options_machine_name($option['name']);
 
                 if (isset($form_state['values'][$option_name])) {
                   if ($form_state['values'][$option_name] == 1) {
@@ -1265,7 +1265,7 @@ function rooms_booking_edit_form_submit(&$form, &$form_state) {
 
   // Store selected unit options.
   foreach (rooms_unit_get_unit_options($unit) as $option) {
-    $option_name = strtolower(str_replace(array(':', ' '), '_', $option['name']));
+    $option_name = rooms_options_machine_name($option['name']);
     if (isset($form_state['values'][$option_name])) {
       if ($form_state['values'][$option_name] == '1') {
         $booking->data[$option_name] = 1;

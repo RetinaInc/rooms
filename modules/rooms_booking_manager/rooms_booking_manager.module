@@ -834,7 +834,7 @@ function book_unit_form_builder($form_id, $form_state, $unit, $start_date, $end_
   $price_modifiers = array();
 
   foreach (rooms_unit_get_unit_options($unit) as $option) {
-    $option_name = strtolower(str_replace(array(':', ' '), '_', $option['name']));
+    $option_name = rooms_options_machine_name($option['name']);
     $form['options'][$option_name] = array(
       '#type' => 'checkbox',
       '#title' => $option['name'],
@@ -1084,7 +1084,7 @@ function book_unit_form_submit(&$form, &$form_state) {
       if (isset($form_state['values']['options'])) {
         // Convert Price options in Price modifiers.
         foreach (rooms_unit_get_unit_options($unit['unit']) as $option) {
-          $option_name = strtolower(str_replace(array(':', ' '), '_', $option['name']));
+          $option_name = rooms_options_machine_name($option['name']);
           if (isset($form_state['values']['options'][$option_name])) {
             if ($form_state['values']['options'][$option_name] == 1) {
               $quantity = 1;
@@ -1391,7 +1391,7 @@ function book_units_per_type_form($form, $form_state, $units_per_type, $start_da
 
           // Add options checkboxes.
           foreach (rooms_unit_get_unit_options($units[$units_keys[$c - 1]]['unit']) as $option) {
-            $option_name = strtolower(str_replace(array(':', ' '), '_', $option['name']));
+            $option_name = rooms_options_machine_name($option['name']);
             $form[$type][$price]['fieldset'][$c][$option_name] = array(
               '#type' => 'checkbox',
               '#title' => $option['name'],
@@ -1419,7 +1419,7 @@ function book_units_per_type_form($form, $form_state, $units_per_type, $start_da
                 );
               }
               else {
-                $form[$type][$price]['fieldset'][$c][strtolower(str_replace(array(':', ' '), '_', $option['name'])) . ':quantity'] = array(
+                $form[$type][$price]['fieldset'][$c][$option_name . ':quantity'] = array(
                   '#prefix' => '<div class="rooms-search-result__select-quantity" id="' . $type . '_' . $price . '_' . $c . '_' . $option_name . '_quantity">',
                   '#suffix' => '</div>',
                 );
@@ -1522,7 +1522,7 @@ function book_units_per_type_form($form, $form_state, $units_per_type, $start_da
 
           $price_modifiers = array();
           foreach (rooms_unit_get_unit_options($units[$units_keys[$c - 1]]['unit']) as $option) {
-            $option_name = strtolower(str_replace(array(':', ' '), '_', $option['name']));
+            $option_name = rooms_options_machine_name($option['name']);
             if (isset($form_state['values'][$type][$price]['fieldset'][$c][$option_name])) {
 
               $quantity = 1;
@@ -1809,13 +1809,14 @@ function book_units_per_type_form_submit(&$form, &$form_state) {
           // Convert Price options in Price modifiers.
           $price_modifiers = array();
           foreach (rooms_unit_get_unit_options($unit['unit']) as $option) {
-            if (isset($form_state['values'][$type][$price_level]['fieldset'][$i][strtolower(str_replace(array(':', ' '), '_', $option['name']))])) {
-              if ($form_state['values'][$type][$price_level]['fieldset'][$i][strtolower(str_replace(array(':', ' '), '_', $option['name']))] == 1) {
+            $option_name = rooms_options_machine_name($option['name']);
+            if (isset($form_state['values'][$type][$price_level]['fieldset'][$i][$option_name])) {
+              if ($form_state['values'][$type][$price_level]['fieldset'][$i][$option_name] == 1) {
                 $quantity = 1;
-                if (isset($form_state['values'][$type][$price_level]['fieldset'][$i][strtolower(str_replace(array(':', ' '), '_', $option['name'])) . ':quantity']) && $option['operation'] != ROOMS_REPLACE) {
-                  $quantity = $form_state['values'][$type][$price_level]['fieldset'][$i][strtolower(str_replace(array(':', ' '), '_', $option['name'])) . ':quantity'] + 1;
+                if (isset($form_state['values'][$type][$price_level]['fieldset'][$i][$option_name . ':quantity']) && $option['operation'] != ROOMS_REPLACE) {
+                  $quantity = $form_state['values'][$type][$price_level]['fieldset'][$i][$option_name . ':quantity'] + 1;
                 }
-                $price_modifiers[strtolower(str_replace(array(':', ' '), '_', $option['name']))] = array(
+                $price_modifiers[$option_name] = array(
                   '#name' => $option['name'],
                   '#type' => ROOMS_DYNAMIC_MODIFIER,
                   '#op_type' => $option['operation'],
@@ -1980,7 +1981,7 @@ function rooms_booking_manager_commerce_checkout_complete($order) {
 
         if (isset($line_item->rooms_booking_options['und'])) {
           foreach ($line_item->rooms_booking_options['und'] as $option) {
-            $option_name = strtolower(str_replace(array(':', ' '), '_', $option['name']));
+            $option_name = rooms_options_machine_name($option['name']);
 
             $booking->data[$option_name] = 1;
             $booking->data[$option_name . ':quantity'] = $option['quantity'] - 1;
@@ -2581,7 +2582,7 @@ function rooms_booking_manager_create_order($start_date, $end_date, $booking_par
   $price_modifiers = array();
   // Convert Price options to Price modifiers.
   foreach (rooms_unit_get_unit_options($unit) as $option) {
-    $opt_name = strtolower(str_replace(array(':', ' '), '_', $option['name']));
+    $opt_name = rooms_options_machine_name($option['name']);
     if (isset($booking->$opt_name) && $booking->$opt_name) {
       $price_modifiers[$opt_name] = array(
         '#name' => $option['name'],
@@ -2667,7 +2668,7 @@ function rooms_booking_manager_price_apply($line_item) {
 
     // Convert Price options in Price modifiers.
     foreach ($price_options as $option) {
-      $price_modifiers[strtolower(str_replace(array(':', ' '), '_', $option['name']))] = array(
+      $price_modifiers[rooms_options_machine_name($option['name'])] = array(
         '#name' => $option['name'],
         '#type' => ROOMS_DYNAMIC_MODIFIER,
         '#op_type' => $option['operation'],
