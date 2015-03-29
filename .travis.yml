@@ -38,7 +38,7 @@ script:
   - cd /var/www/drupal/sites/all/modules
   - git clone https://github.com/roomify/rooms.git rooms
   # just try out behat
-  - ./bin/behat
+  - bin/behat
 
 after_script:
   - drush status
