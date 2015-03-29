@@ -19,7 +19,6 @@ install:
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
 
 before_script:
-
   # establish drupal package put in place the right way
   - sudo mkdir -p /var/www
   - sudo chown travis:travis /var/www
@@ -29,6 +28,16 @@ before_script:
   - cd ~/.drush/
   - git clone https://github.com/drupalprojects/drush_recipes.git
   - drush cc drush
+
+script:
+  # stand up drupal
+  - cd /var/www/drupal
+  - drush site-install -y --db-url=mysql://root@localhost/travisdb --db-su='root' --db-su-pw=''
+  - cd /var/www/drupal/sites/all/modules
+  - git clone https://github.com/roomify/rooms.git rooms
+
+after_script:
+  - drush status
 
 notifications:
   slack:
