@@ -39,7 +39,7 @@ script:
   - drush site-install -y --db-url=mysql://root@localhost/travisdb --db-su='root' --db-su-pw=''
   - cd /var/www/drupal/sites/all/modules
   - git clone https://github.com/roomify/rooms.git rooms
-  # just try out behat
+  # just try out behat now
   - behat
 
 after_script:
