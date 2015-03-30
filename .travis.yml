@@ -25,7 +25,7 @@ before_script:
   - sudo mkdir -p /var/www
   - sudo chown travis:travis /var/www
   - drush dl drupal --destination=/var/www --default-major=7 --drupal-project-rename=drupal --y
-  - cd /var/www/profiles
+  - cd /var/www/drupal/profiles
   - git clone https://github.com/Roomify/RoomifyCore.git roomifycore
   - cd roomifycore
   - drush make --contrib-destination --no-core roomifycore.make
