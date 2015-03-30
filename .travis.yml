@@ -28,7 +28,7 @@ before_script:
   - cd /var/www/drupal/profiles
   - git clone https://github.com/Roomify/RoomifyCore.git roomifycore
   - cd roomifycore
-  - drush make --contrib-destination --no-core roomifycore.make
+  - drush make -y --contrib-destination --no-core roomifycore.make
 
   # get drush recipes setup functions
   - sudo chown -R travis:travis ~/.drush
